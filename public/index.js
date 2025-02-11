@@ -1,5 +1,5 @@
 import { generateLoginComponent } from "./scripts/loginComponent/loginComponent.js";
-import { generateNavigator } from "./scripts/navigatorComponent/navigator.js";
+import { generateNavigator } from "./scripts/navigatorComponent/navigatorComponent.js";
 import { generatePubSub } from "./scripts/pubSubComponent/pubSubComponent.js";
 
 const pubsub = generatePubSub();
