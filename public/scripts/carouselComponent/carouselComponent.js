@@ -6,7 +6,11 @@ export const generateCarouselComponent = (parentElement) => {
             images=inputImages;
         },
         render: () => {
-            let html=
+            let html="";
+            images.forEach(element => {
+                html+='<div class="carousel-item"><img src="'+element+'"class="d-block w-100"></div>';
+            });
+            parentElement.innerHTLM=html;
         }
     }
 }
