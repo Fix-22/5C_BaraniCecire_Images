@@ -7,10 +7,13 @@ export const generateCarouselComponent = (parentElement) => {
         },
         render: () => {
             let html="";
+            let first = true;
+
             images.forEach(element => {
-                html+='<div class="carousel-item"><img src="'+element+'"class="d-block w-100"></div>';
+                html+='<div class="carousel-item' + (first ? ' active"' : '"') + '><img src="'+element.url+'"class="d-block w-100"></div>';
+                first = false;
             });
-            parentElement.innerHTLM=html;
+            parentElement.innerHTML=html;
         }
     }
 }

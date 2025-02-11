@@ -5,10 +5,10 @@ const path = require('path');
 const fs = require('fs');
 const generatePersistance = require("./layers/persistance.js");
 
-const conf = JSON.parse(fs.readFileSync('conf.json'));
-conf.ssl.ca = fs.readFileSync(path.join(__dirname, "ca.pem"));
+const conf = JSON.parse(fs.readFileSync('public/conf.json'));
+conf.persistance.ssl.ca = fs.readFileSync(path.join(__dirname, "ca.pem"));
 
-const persistance = generatePersistance(conf);
+const persistance = generatePersistance(conf.persistance);
 
 const app = express();
 
