@@ -43,10 +43,6 @@ export const generateLoginComponent = (parentElement, pubsub) => {
         },
         renderForm: () => {
             const html = `
-               <div class="container">
-                    <h1 class="page-heading single-col-max mx-auto">Admin</h1>
-                    <div class="page-intro single-col-max mx-auto"></div>
-                </div>
                 <div class="col">
                     <input type="text" class="form-control" id="inputUsername" placeholder="Username">
                 </div>
@@ -54,9 +50,9 @@ export const generateLoginComponent = (parentElement, pubsub) => {
                     <input type="password" class="form-control" id="inputPassword" placeholder="Password">
                 </div>
                 <div class="col">
-                    <button type="button" class="btn btn-dark" id="loginButton"><i class="fa-solid fa-right-to-bracket"></i> LOGIN</button>
+                    <button type="button" class="btn btn-primary" id="loginButton"> Login</button>
                 </div>
-                <p id="loginResult"></p> `;
+                <p id="loginResult" class="text-danger"></p> `;
             parentElement.innerHTML = html;
 
             document.getElementById("loginButton").onclick = () => {
@@ -80,7 +76,6 @@ export const generateLoginComponent = (parentElement, pubsub) => {
                             
                             document.getElementById("inputUsername").value = "";
                             document.getElementById("inputPassword").value = "";
-                            pubsub.publish("login")
                         } 
                         else {
                             loginResult.innerText = "Incorrect username or password";

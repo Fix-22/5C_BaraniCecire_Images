@@ -2,24 +2,49 @@ import { generateNavigator } from "./scripts/navigatorComponent/navigatorCompone
 import { generatePubSub } from "./scripts/pubSubComponent/pubSubComponent.js";
 import { generateLoginComponent } from "./scripts/loginComponent/loginComponent.js";
 import { generateCarouselComponent } from "./scripts/carouselComponent/carouselComponent.js";
+import { generateTableComponent } from "./scripts/tableComponent/tableComponent.js";
 
 generateNavigator(pages);
 
 const pubsub = generatePubSub();
-const loginContainer = document.getElementById("loginContainer");
-const loginComponent = generateLoginComponent(loginContainer, pubsub);
 const carouselContainer = document.getElementById("carouselBody");
 const carouselComponent = generateCarouselComponent(carouselContainer);
+const loginContainer = document.getElementById("loginContainer");
+const loginComponent = generateLoginComponent(loginContainer, pubsub);
+const tableContainer = document.getElementById("tableContainer");
+const tableComponent = generateTableComponent(tableContainer, pubsub);
+
+const spinner = document.getElementById("spinner");
 
 fetch("conf.json").then(d => d.json()).then(json => {
     const cacheToken = json.cacheToken;
 
     fetch("/get").then(r => r.json()).then(data => {
-        console.log(data.images)
+        spinner.classList.add("d-none");
+
+        loginComponent.build(cacheToken, "private");
+        loginComponent.renderForm();
+
         carouselComponent.build(data.images);
         carouselComponent.render();
-    });
 
-    loginComponent.build(cacheToken, "private");
-    loginComponent.renderForm();
+        tableComponent.build(["Image", "URL", "Delete"], data.images);
+        tableComponent.render();
+
+        pubsub.subscribe("image-deleted", id => {
+            spinner.classList.remove("d-none");
+
+            fetch("/delete/" + id, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(r => r.json())
+            .then(d => {
+                spinner.classList.add("d-none");
+                tableComponent.render();
+            });
+        });
+    });
 });

@@ -1,4 +1,4 @@
-export const generateAdminTable = (parentElement,pubsub) => {
+export const generateTableComponent = (parentElement,pubsub) => {
     let header = [];
     let data = [];
 
@@ -19,10 +19,12 @@ export const generateAdminTable = (parentElement,pubsub) => {
             });
             html += "</tr></thead><tbody>";
 
-            let dataKeys = Object.keys(data);
-
-            dataKeys.forEach(e => {
-                html += '<tr><td><a href="' + e + '"id="' + e + '" class="articleLink">' + e + ' <i class="fa-solid fa-arrow-up-right-from-square"></i></a></td><td><button type="button" id="edit-' + e + '" class="btn btn-warning editButton" data-bs-toggle="modal" data-bs-target="#modalForm"><i class="fa-solid fa-pen-to-square"></i> Edit</button> <button type="button" id="delete-' + e + '" class="btn btn-danger deleteButton"><i class="fa-solid fa-trash"></i> Delete</button></td></tr>';
+            let dataValues = Object.values(data);
+            console.log(dataValues);
+            
+            
+            dataValues.forEach(e => {
+                html += '<tr><td><img class="img-mini" src="' + e.url + '"></td><td><a target="_blank" href="' + e.url + '"id="' + e.id + '" class="articleLink">' + e.url + ' </a></td><td><button type="button" id="delete-' + e.id + '" class="btn btn-danger deleteButton"> Delete</button></td></tr>';
             });
 
             html += "</tbody></table>";
@@ -30,11 +32,11 @@ export const generateAdminTable = (parentElement,pubsub) => {
 
             document.querySelectorAll(".deleteButton").forEach(b => {
                 b.onclick = () => {
-                    const playTitle = b.id.replace("delete-", "");
+                    const imageId = parseInt(b.id.replace("delete-", ""));
                     
-                    delete data[playTitle];
+                    data = data.filter(e => e.id !== imageId);
                     
-                    pubsub.publish("image-deleted", data);
+                    pubsub.publish("image-deleted", imageId);
                 };
             });
         },
