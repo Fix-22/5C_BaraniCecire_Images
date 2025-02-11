@@ -27,31 +27,28 @@ module.exports = function generatePersistance(conf) {
         })
     };
 
+    // crea tabella se non esiste
     executeQuery(`
         CREATE TABLE IF NOT EXISTS image
-            (id INT PRIMARY KEY AUTO_INCREMENT, 
-                url varchar(255) NOT NULL)
+        (id INT PRIMARY KEY AUTO_INCREMENT, url varchar(255) NOT NULL);
     `);
 
     return {
         insertImage: async (req, res) => {
             upload(req, res, err => {   
-                const template = `
-                INSERT INTO image (url) VALUES ('$URL')
-                `;
-            let sql = template.replace("$URL", "./images/"+req.file.filename);
-            return executeQuery(sql);      
-                       
-            })
+                const template = "INSERT INTO image (url) VALUES ('$URL');";
+                let sql = template.replace("$URL", "./images/" + req.file.filename);
+                return executeQuery(sql);              
+            });
         },
         selectAllImages: async () => {
-            const sql = `
-                SELECT id, url FROM image
-                `;
-        return executeQuery(sql);
+            return executeQuery("SELECT id, url FROM image;");
         },
         deleteImage: async (id) => {
             return executeQuery("DELETE FROM image WHERE id=" + id + ";");
+        },
+        clear: async () => {
+            return executeQuery("TRUNCATE TABLE image;");
         }
     };
 };
