@@ -34,7 +34,7 @@ module.exports = function generatePersistance(conf) {
     `);
 
     return {
-        insertImage: async (image) => {
+        insertImage: async (req, res) => {
 
         },
         selectAllImages: async () => {

@@ -6,7 +6,7 @@ const fs = require('fs');
 const generatePersistance = require("./layers/persistance.js");
 
 const conf = JSON.parse(fs.readFileSync('conf.json'));
-conf.ssl.ca = fs.readFileSync(__dirname + "/ca.pem");
+conf.ssl.ca = fs.readFileSync(path.join(__dirname, "ca.pem"));
 
 const persistance = generatePersistance(conf);
 
@@ -16,16 +16,21 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist/")));
 
-app.post('/add', (req, res) => {
-    
+app.post('/add', async (req, res) => {
+    const r = await persistance.insertImage(req, res);
+    console.log(r);
+    res.json({result: "Ok"});
 });
 
-app.get('/get', (req, res) => {
-
+app.get('/get', async (req, res) => {
+    const images = await persistance.selectAllImages();
+    res.json({images: images});
 });
 
-app.delete('/delete/:id', (req, res) => {
-
+app.delete('/delete/:id', async (req, res) => {
+    const r = await persistance.deleteImage(req.params.id);
+    console.log(r);
+    res.json({result: "Ok"});
 });
 
 const server = http.createServer(app);
