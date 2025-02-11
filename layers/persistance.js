@@ -35,13 +35,23 @@ module.exports = function generatePersistance(conf) {
 
     return {
         insertImage: async (req, res) => {
-
+            upload(req, res, err => {   
+                const template = `
+                INSERT INTO image (url) VALUES ('$URL')
+                `;
+            let sql = template.replace("$URL", "./images/"+req.file.filename);
+            return executeQuery(sql);      
+                       
+            })
         },
         selectAllImages: async () => {
-
+            const sql = `
+                SELECT id, url FROM image
+                `;
+        return executeQuery(sql);
         },
         deleteImage: async (id) => {
-             
+            return executeQuery("DELETE FROM image WHERE id=" + id + ";");
         }
     };
 };
