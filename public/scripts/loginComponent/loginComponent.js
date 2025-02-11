@@ -1,4 +1,4 @@
-export const generateLoginComponent = (parentElement,pubsub) => {
+export const generateLoginComponent = (parentElement, pubsub) => {
     let token;
     let isLogged;
     let privateClass;
