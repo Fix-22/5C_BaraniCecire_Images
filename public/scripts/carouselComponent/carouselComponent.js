@@ -3,10 +3,10 @@ export const generateCarouselComponent = (parentElement) => {
 
     return {
         build: (inputImages) => {
-
+            images=inputImages;
         },
         render: () => {
-
+            let html=
         }
     }
 }
