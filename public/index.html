@@ -45,23 +45,24 @@
                 <div id="tableContainer"></div>
             </div>
         </div>
-  
-        <div class="modal modal-dialog modal-dialog-centered fade" id="modalForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add image</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modalBody" id="modalBody"></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger clearForm" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary clearForm" id="submitButton">Upload</button>
-                    </div>
+    </div>
+
+    <div class="modal fade" id="modalForm" data-bs-backdrop="static" tabindex="-1" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Add image</h1>
+                    <button type="button" class="btn-close clearForm" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modalBody" id="modalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger clearForm" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary clearForm" id="submitButton">Upload</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script type="module" src="index.js"></script>
+    <script type="module" src="index.js"></script>
 </body>
 </html>

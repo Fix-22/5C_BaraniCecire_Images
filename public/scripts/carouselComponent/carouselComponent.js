@@ -1,11 +1,15 @@
-export const generateCarouselComponent = (parentElement) => {
+export const generateCarouselComponent = (parentElement, pubsub) => {
     let images;
 
-    return {
-        build: (inputImages) => {
+    const carouselObject = {
+        build: function(inputImages) {
             images=inputImages;
+            pubsub.subscribe("get-remote-data",(remoteData)=>{
+                images = remoteData;
+                this.render();
+            })
         },
-        render: () => {
+        render: function() {
             let html="";
             let first = true;
 
@@ -16,4 +20,6 @@ export const generateCarouselComponent = (parentElement) => {
             parentElement.innerHTML=html;
         }
     }
+
+    return carouselObject;
 }

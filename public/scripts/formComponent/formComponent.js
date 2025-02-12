@@ -4,17 +4,16 @@ export const generateFormComponent = (parentElement, pubsub) => {
             let html = 
             `<form class="container-fluid">
                 <div class="mb-3">
-                <label for="formFile" class="form-label">Select image</label>
-                <input class="form-control" type="file" id="formFile">
-            </div>
+                    <label for="formFile" class="form-label">Select image</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
                 
                 <div id="resultLabel" class="form-text text-danger text-center"></div>
-                </div>
             </form>
                             ` ;
             parentElement.innerHTML = html ;
 
-            const inputFile= document.getElementById("formFile");
+            const inputFile = document.getElementById("formFile");
             document.querySelectorAll(".clearForm").forEach(b => {
                 b.onclick = () => {
                     if (b.id === "submitButton") {
@@ -22,8 +21,6 @@ export const generateFormComponent = (parentElement, pubsub) => {
                             const formData = new FormData();
                             formData.append("file", inputFile.files[0]); 
                             const body = formData;
-                            console.log(body)
-
                             pubsub.publish("form-submit", body);
                         }
                         else {
@@ -37,11 +34,12 @@ export const generateFormComponent = (parentElement, pubsub) => {
             })
         },
         clear: () => {
-            inputFile.files="";
+            document.getElementById("resultLabel").innerText = "";
+            document.getElementById("formFile").value="";
         },
         setError: (error) => {
             document.getElementById("resultLabel").innerText = error;
-        },
+        }
     }
     return formObject;
 };

@@ -3,35 +3,49 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
-const generatePersistance = require("./layers/persistance.js");
+const multer  = require('multer');
+const generatedb = require("./layers/DBConnector");
 
 const conf = JSON.parse(fs.readFileSync('public/conf.json'));
-conf.persistance.ssl.ca = fs.readFileSync(path.join(__dirname, "ca.pem"));
+conf.db.ssl.ca = fs.readFileSync(path.join(__dirname, "ca.pem"));
 
-const persistance = generatePersistance(conf.persistance);
+const db = generatedb(conf.db);
 
 const app = express();
+
+let storage = multer.diskStorage({
+        destination: function (req, file, callback) {
+            callback(null, path.join(__dirname, "images"));
+        },
+        filename: function (req, file, callback) {
+            callback(null, file.originalname);
+        }
+    });
+    const upload = multer({storage: storage}).single('file');
 
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist/")));
 
 app.post('/add', async (req, res) => {
-    console.log(req)
-    const r = await persistance.insertImage(req, res);
-    console.log(r);
-    res.json({result: "Ok"});
+    upload(req, res, (err) => {
+        db.insertURL(req.file.filename);
+        res.json({result: "Ok"});
+
+        console.log("Uploaded: " + req.file.filename)
+    });
 });
 
 app.get('/get', async (req, res) => {
-    const images = await persistance.selectAllImages();
+    const images = await db.selectAllImages();
     res.json({images: images});
 });
 
 app.delete('/delete/:id', async (req, res) => {
-    const r = await persistance.deleteImage(req.params.id);
-    console.log(r);
+    await db.deleteImage(req.params.id);
     res.json({result: "Ok"});
+
+    console.log("Deleted image with id: " + req.params.id)
 });
 
 const server = http.createServer(app);

@@ -19,9 +19,7 @@ export const generateTableComponent = (parentElement,pubsub) => {
             });
             html += "</tr></thead><tbody>";
 
-            let dataValues = Object.values(data);
-            console.log(dataValues);
-            
+            let dataValues = Object.values(data);            
             
             dataValues.forEach(e => {
                 html += '<tr><td><img class="img-mini" src="' + e.url + '"></td><td><a target="_blank" href="' + e.url + '"id="' + e.id + '" class="articleLink">' + e.url + ' </a></td><td><button type="button" id="delete-' + e.id + '" class="btn btn-danger deleteButton"> Delete</button></td></tr>';

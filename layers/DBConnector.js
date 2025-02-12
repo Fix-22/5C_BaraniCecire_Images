@@ -1,19 +1,8 @@
 const path = require('path');
 const mysql = require('mysql2');
-const multer  = require('multer');
 
-module.exports = function generatePersistance(conf) {
+module.exports = function generateDBConnector(conf) {
     const connection = mysql.createConnection(conf);
-
-    let storage = multer.diskStorage({
-        destination: function (req, file, callback) {
-            callback(null, path.join(__dirname, "files"));
-        },
-        filename: function (req, file, callback) {
-            callback(null, file.originalname);
-        }
-    });
-    const upload = multer({storage: storage}).single('file');
 
     const executeQuery = (sql) => {
         return new Promise((resolve, reject) => {      
@@ -34,12 +23,11 @@ module.exports = function generatePersistance(conf) {
     `);
 
     return {
-        insertImage: async (req, res) => {
-            upload(req, res, err => {
-                const template = "INSERT INTO image (url) VALUES ('$URL');";
-                let sql = template.replace("$URL", "./images/" + req.file.filename);
-                return executeQuery(sql);              
-            });
+        insertURL: async (filename) => {
+            const template = "INSERT INTO image (url) VALUES ('$URL');";
+            let sql = template.replace("$URL", "./images/" + filename);
+            let r = await executeQuery(sql);   
+            return r;
         },
         selectAllImages: async () => {
             return executeQuery("SELECT id, url FROM image;");

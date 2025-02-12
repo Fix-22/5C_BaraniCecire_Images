@@ -9,7 +9,7 @@ generateNavigator(pages);
 
 const pubsub = generatePubSub();
 const carouselContainer = document.getElementById("carouselBody");
-const carouselComponent = generateCarouselComponent(carouselContainer);
+const carouselComponent = generateCarouselComponent(carouselContainer, pubsub);
 const loginContainer = document.getElementById("loginContainer");
 const loginComponent = generateLoginComponent(loginContainer, pubsub);
 const tableContainer = document.getElementById("tableContainer");
@@ -18,6 +18,8 @@ const formContainer = document.getElementById("modalBody");
 const formComponent = generateFormComponent(formContainer, pubsub);
 
 const spinner = document.getElementById("spinner");
+
+const modal = new bootstrap.Modal("#modalForm");
 
 fetch("conf.json").then(d => d.json()).then(json => {
     const cacheToken = json.cacheToken;
@@ -46,22 +48,27 @@ fetch("conf.json").then(d => d.json()).then(json => {
                 }
             })
             .then(r => r.json())
-            .then(d => {
-                spinner.classList.add("d-none");
-                tableComponent.render();
+            .then(data => {
+                fetch("/get").then(r => r.json()).then(data => {
+                    pubsub.publish("get-remote-data", data.images);
+                    spinner.classList.add("d-none");
+                });
             });
         });
 
         pubsub.subscribe("form-submit", formData => {
             spinner.classList.remove("d-none");
+            modal.hide();
             
             fetch("/add", {
                 method: "POST",
                 body: formData
             }).then(r => r.json())
             .then(data => {
-                spinner.classList.add("d-none");
-                pubsub.publish("get-remote-data");
+                fetch("/get").then(r => r.json()).then(data => {
+                    pubsub.publish("get-remote-data", data.images);
+                    spinner.classList.add("d-none");
+                });
             });
         });
     });
