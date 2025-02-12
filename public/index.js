@@ -34,6 +34,8 @@ fetch("conf.json").then(d => d.json()).then(json => {
         tableComponent.build(["Image", "URL", "Delete"], data.images);
         tableComponent.render();
 
+        formComponent.render();
+
         pubsub.subscribe("image-deleted", id => {
             spinner.classList.remove("d-none");
 
@@ -50,9 +52,7 @@ fetch("conf.json").then(d => d.json()).then(json => {
             });
         });
 
-        pubsub.subscribe("form-submit", image => {
-            const formData = new FormData();
-            formData.append("file", image);
+        pubsub.subscribe("form-submit", formData => {
             spinner.classList.remove("d-none");
             
             fetch("/add", {

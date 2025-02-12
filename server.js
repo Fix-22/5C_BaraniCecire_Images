@@ -17,6 +17,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist/")));
 
 app.post('/add', async (req, res) => {
+    console.log(req)
     const r = await persistance.insertImage(req, res);
     console.log(r);
     res.json({result: "Ok"});

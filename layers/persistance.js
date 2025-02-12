@@ -35,7 +35,7 @@ module.exports = function generatePersistance(conf) {
 
     return {
         insertImage: async (req, res) => {
-            upload(req, res, err => {   
+            upload(req, res, err => {
                 const template = "INSERT INTO image (url) VALUES ('$URL');";
                 let sql = template.replace("$URL", "./images/" + req.file.filename);
                 return executeQuery(sql);              
