@@ -49,5 +49,20 @@ fetch("conf.json").then(d => d.json()).then(json => {
                 tableComponent.render();
             });
         });
+
+        pubsub.subscribe("form-submit", image => {
+            const formData = new FormData();
+            formData.append("file", image);
+            spinner.classList.remove("d-none");
+            
+            fetch("/add", {
+                method: "POST",
+                body: formData
+            }).then(r => r.json())
+            .then(data => {
+                spinner.classList.add("d-none");
+                pubsub.publish("get-remote-data");
+            });
+        });
     });
 });
