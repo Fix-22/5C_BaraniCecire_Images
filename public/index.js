@@ -3,6 +3,7 @@ import { generatePubSub } from "./scripts/pubSubComponent/pubSubComponent.js";
 import { generateLoginComponent } from "./scripts/loginComponent/loginComponent.js";
 import { generateCarouselComponent } from "./scripts/carouselComponent/carouselComponent.js";
 import { generateTableComponent } from "./scripts/tableComponent/tableComponent.js";
+import { generateFormComponent } from "./scripts/formComponent/formComponent.js";
 
 generateNavigator(pages);
 
@@ -13,6 +14,9 @@ const loginContainer = document.getElementById("loginContainer");
 const loginComponent = generateLoginComponent(loginContainer, pubsub);
 const tableContainer = document.getElementById("tableContainer");
 const tableComponent = generateTableComponent(tableContainer, pubsub);
+const formContainer = document.getElementById("formContainer");
+const formComponent = generateForm(formContainer, pubsub);
+43er
 
 const spinner = document.getElementById("spinner");
 
