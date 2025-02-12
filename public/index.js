@@ -14,9 +14,8 @@ const loginContainer = document.getElementById("loginContainer");
 const loginComponent = generateLoginComponent(loginContainer, pubsub);
 const tableContainer = document.getElementById("tableContainer");
 const tableComponent = generateTableComponent(tableContainer, pubsub);
-const formContainer = document.getElementById("formContainer");
-const formComponent = generateForm(formContainer, pubsub);
-43er
+const formContainer = document.getElementById("modalBody");
+const formComponent = generateFormComponent(formContainer, pubsub);
 
 const spinner = document.getElementById("spinner");
 

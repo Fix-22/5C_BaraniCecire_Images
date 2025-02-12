@@ -43,6 +43,7 @@ export const generateLoginComponent = (parentElement, pubsub) => {
         },
         renderForm: () => {
             const html = `
+                <h1>Login</h1>
                 <div class="col">
                     <input type="text" class="form-control" id="inputUsername" placeholder="Username">
                 </div>

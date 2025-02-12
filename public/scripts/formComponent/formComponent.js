@@ -1,4 +1,4 @@
-export const generateForm = (parentElement, pubsub) => {
+export const generateFormComponent = (parentElement, pubsub) => {
     let onEdit;
     const formObject = {
         render : function() {
@@ -21,12 +21,6 @@ export const generateForm = (parentElement, pubsub) => {
             let workTitleInput = document.getElementById("workTitleInput") ;
             let textInput = document.getElementById("textInput") ;
             let playMainLink = document.getElementById("playMainLink") ;
-            //let playLocation = document.getElementById("playLocation") ;
-            //let playCharacters = document.getElementById("playCharacters") ;
-            //let playSecondLink = document.getElementById("playSecondLink") ;
-            //let playPubblicationYear = document.getElementById("playPubblicationYear") ;
-            //let playEra = document.getElementById("playEra") ;
-            //let playThirdLink = document.getElementById("playThirdLink") ;
             let resultLabel = document.getElementById("resultLabel");
             let newImages = [] ;
 
@@ -37,8 +31,6 @@ export const generateForm = (parentElement, pubsub) => {
                             document.getElementById("adminFormTitle").innerText = "Add article";
 
                             if (playMainLink.value) newImages.push(playMainLink.value)
-                            //if (playSecondLink.value) newImages.push(playSecondLink.value)
-                            //if (playThirdLink.value) newImages.push(playThirdLink.value)
     
                             let article = {} ;
                             let title = workTitleInput.value ;

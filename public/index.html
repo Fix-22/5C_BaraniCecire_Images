@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>5C - Barani e Cecire - Images</title>
     <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
     <script src="js/bootstrap.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css">
@@ -33,17 +33,32 @@
                     </button>
                 </div>
             </div>
-            <div class="container">
-            <div id="formContainer"></div>
         </div>
-        </div>
-       
+        
         <div id="admin" class="page">
             <div class="container">
                 <div id="loginContainer"></div>
             </div>
             <div class="container private">
+                <h1>Admin</h1>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm">Add image</button>
                 <div id="tableContainer"></div>
+            </div>
+        </div>
+  
+        <div class="modal modal-dialog modal-dialog-centered fade" id="modalForm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add image</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modalBody"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Understood</button>
+                    </div>
+                </div>
             </div>
         </div>
 
