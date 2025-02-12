@@ -5,7 +5,7 @@ export const generateFormComponent = (parentElement, pubsub) => {
             `<form class="container-fluid">
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Select image</label>
-                    <input class="form-control" type="file" id="formFile">
+                    <input class="form-control" type="file" id="formFile" accept="image/*">
                 </div>
                 
                 <div id="resultLabel" class="form-text text-danger text-center"></div>
@@ -22,6 +22,7 @@ export const generateFormComponent = (parentElement, pubsub) => {
                             formData.append("file", inputFile.files[0]); 
                             const body = formData;
                             pubsub.publish("form-submit", body);
+                            this.clear();
                         }
                         else {
                             resultLabel.innerText = "Not all forms compiled";
