@@ -38,11 +38,7 @@ export const generateFormComponent = (parentElement, pubsub) => {
                                 "name": playLocation.value,
                                 "coords": []
                             } ;
-                            /*article.yearofpub = playPubblicationYear.value ;
-                            article.era = playEra.value ;
-                            article.resume = textInput.value ;*/
                             article.images = newImages ;
-                            //article.characters = playCharacters.value ;
                             newImages = [];
 
                             let fullArticle = {
@@ -59,15 +55,8 @@ export const generateFormComponent = (parentElement, pubsub) => {
                     else {
                         onEdit = false;
                         document.getElementById("adminFormTitle").innerText = "Add article";
-                        //workTitleInput.value = "" ;
                         textInput.value = "" ;
                         playMainLink.value = "" ;
-                        //playSecondLink.value = "" ;
-                        //playThirdLink.value = "" ;
-                        //playLocation.value = "" ;
-                        //playCharacters.value = "" ;
-                        //playPubblicationYear.value = "" ;
-                        //playEra.value = "" ;
                         resultLabel.innerText = "";
                     }
                 };
@@ -79,12 +68,6 @@ export const generateFormComponent = (parentElement, pubsub) => {
             if (title) document.getElementById("workTitleInput").value = title ;
             if (articleDictionary.resume) document.getElementById("textInput").value = articleDictionary.resume ;
             if (articleDictionary.images[0]) document.getElementById("playMainLink").value = articleDictionary.images[0] ;
-            //if (articleDictionary.images[1]) document.getElementById("playSecondLink").value =  articleDictionary.images[1] ;
-            //if (articleDictionary.images[2]) document.getElementById("playThirdLink").value =  articleDictionary.images[2] ;
-            //if (articleDictionary.place.name) document.getElementById("playLocation").value =  articleDictionary.place.name ;
-            //if (articleDictionary.characters) document.getElementById("playCharacters").value = articleDictionary.characters ;
-            //if (articleDictionary.yearofpub) document.getElementById("playPubblicationYear").value = articleDictionary.yearofpub ;
-            //if (articleDictionary.era) document.getElementById("playEra").value = articleDictionary.era ;
         },
         clear: () => {
             onEdit = false;
@@ -92,12 +75,6 @@ export const generateFormComponent = (parentElement, pubsub) => {
             document.getElementById("workTitleInput").value = "" ;
             document.getElementById("textInput").value = "" ;
             document.getElementById("playMainLink").value = "" ;
-            //document.getElementById("playSecondLink").value = "" ;
-            //document.getElementById("playThirdLink").value = "" ;
-            //document.getElementById("playLocation").value = "" ;
-            //document.getElementById("playCharacters").value = "" ;
-            //document.getElementById("playPubblicationYear").value = "" ;
-            //document.getElementById("playEra").value = "" ;
             document.getElementById("resultLabel").innerText = "" ;
         },
         setError: (error) => {
