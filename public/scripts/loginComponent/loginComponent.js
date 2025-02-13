@@ -41,7 +41,7 @@ export const generateLoginComponent = (parentElement, pubsub) => {
                 });
             }
         },
-        renderForm: () => {
+        renderForm: () => { //render della pagina admin
             const html = `
                 <h1>Login</h1>
                 <div class="col">
@@ -61,6 +61,7 @@ export const generateLoginComponent = (parentElement, pubsub) => {
                 const password = document.getElementById("inputPassword").value;
                 const loginResult = document.getElementById("loginResult");
 
+                //condizioni di controllo per l'accesso
                 if (username && password) {
                     login(username, password)
                     .then(r => {

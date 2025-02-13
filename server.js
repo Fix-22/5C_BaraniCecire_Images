@@ -13,7 +13,8 @@ const db = generatedb(conf.db);
 
 const app = express();
 
-let storage = multer.diskStorage({
+//funzione per memorizzazione delle immagini su file system
+let storage = multer.diskStorage({ 
         destination: function (req, file, callback) {
             callback(null, path.join(__dirname, "images"));
         },
@@ -23,24 +24,27 @@ let storage = multer.diskStorage({
     });
     const upload = multer({storage: storage}).single('file');
 
-app.use("/", express.static(path.join(__dirname, "public")));
-app.use("/images", express.static(path.join(__dirname, "images")));
-app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist/")));
+app.use("/", express.static(path.join(__dirname, "public"))); //permette download della pagina lato client
+app.use("/images", express.static(path.join(__dirname, "images"))); //permette accesso alle immagini
+app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist/"))); //permette accesso a bootstrap all'appliacazione lato client
 
+//espone il web service per aggiungere immagini
 app.post('/add', async (req, res) => {
-    upload(req, res, (err) => {
-        db.insertURL(req.file.filename);
+    upload(req, res, (err) => { //funzione per memorizzare l'immagine su file system
+        db.insertURL(req.file.filename); //manda url al database
         res.json({result: "Ok"});
 
         console.log("Uploaded: " + req.file.filename)
     });
 });
 
+//web services che permette di avere tutte le url delle immagini
 app.get('/get', async (req, res) => {
     const images = await db.selectAllImages();
     res.json({images: images});
 });
 
+//web services per cancellare le immagini dal db dato il suo id
 app.delete('/delete/:id', async (req, res) => {
     await db.deleteImage(req.params.id);
     res.json({result: "Ok"});
@@ -50,6 +54,7 @@ app.delete('/delete/:id', async (req, res) => {
 
 const server = http.createServer(app);
 
-server.listen(80, () => {
+//parte il server
+server.listen(80, () => { 
     console.log("Server running...");
 });

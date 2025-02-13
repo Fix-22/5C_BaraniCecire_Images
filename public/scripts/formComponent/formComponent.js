@@ -1,6 +1,6 @@
 export const generateFormComponent = (parentElement, pubsub) => {
     const formObject = {
-        render : function() {
+        render : function() { //render per l'imput delle immagini
             let html = 
             `<form class="container-fluid">
                 <div class="mb-3">
@@ -38,7 +38,7 @@ export const generateFormComponent = (parentElement, pubsub) => {
             document.getElementById("resultLabel").innerText = "";
             document.getElementById("formFile").value="";
         },
-        setError: (error) => {
+        setError: (error) => { //funzione di controllo per l'input 
             document.getElementById("resultLabel").innerText = error;
         }
     }

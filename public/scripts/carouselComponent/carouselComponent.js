@@ -9,7 +9,7 @@ export const generateCarouselComponent = (parentElement, pubsub) => {
                 this.render();
             })
         },
-        render: function() {
+        render: function() { //render per la visualizzazione del carosello
             let html="";
             let first = true;
 

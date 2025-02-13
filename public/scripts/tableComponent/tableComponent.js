@@ -2,7 +2,7 @@ export const generateTableComponent = (parentElement,pubsub) => {
     let header = [];
     let data = [];
 
-    const tableObject = {
+    const tableObject = { //build della tabella nella pagina admin
         build: function(inputHeader, inputData) {
             header = inputHeader;
             data = inputData;
@@ -11,7 +11,7 @@ export const generateTableComponent = (parentElement,pubsub) => {
                 this.render();
             })
         },
-        render: function() {
+        render: function() { //render per la visualizzazione della tabella
             let html = '<table class="table table-focus table-striped"><thead class="sticky-on-top"><tr>';
             
             header.forEach(e => {
@@ -28,7 +28,7 @@ export const generateTableComponent = (parentElement,pubsub) => {
             html += "</tbody></table>";
             parentElement.innerHTML = html;
 
-            document.querySelectorAll(".deleteButton").forEach(b => {
+            document.querySelectorAll(".deleteButton").forEach(b => { //funzione del bottone elimina
                 b.onclick = () => {
                     const imageId = parseInt(b.id.replace("delete-", ""));
                     
@@ -38,10 +38,10 @@ export const generateTableComponent = (parentElement,pubsub) => {
                 };
             });
         },
-        setData: function(inputData) {
+        setData: function(inputData) { //scrive i dati della tabella 
             data = inputData;
         },
-        getData: function() {
+        getData: function() { //prende i dati della tabella
             return data;
         }
     };
