@@ -1,16 +1,17 @@
 export const generateMiddleware=()=>{
 return{
-    load: async()=>{
-        try{
-        fetch("/get").then(r => r.json()).then(data => {
-            return data.images;
-        })
-        }catch(err){
-            console.error(err);
-        }
+    load: ()=>{
+        return new Promise((resolve, reject) => {
+            fetch("/get").then(r => r.json()).then(data => {
+                resolve(data);
+            }).catch(err => {
+                reject(err);
+            })
+        });
     },
 
-    delete:async(id)=>{
+    delete: (id) =>{
+
         fetch("/delete/"+id, {
             method: "delete",
             headers: {

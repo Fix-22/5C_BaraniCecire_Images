@@ -22,44 +22,45 @@ const formComponent = generateFormComponent(formContainer, pubsub);
 const spinner = document.getElementById("spinner");
 
 const modal = new bootstrap.Modal("#modalForm");
-const conf=await fetch("conf.json");
-const json=await conf.json();
-const cacheToken = json.cacheToken;
+fetch("conf.json").then(r => r.json()).then(data => {
+    const cacheToken = data.cacheToken;
 
-const remoteData=await middleware.load();
+    middleware.load().then(remoteData => {
+        console.log(remoteData)
+        spinner.classList.add("d-none");
 
-spinner.classList.add("d-none");
+        loginComponent.build(cacheToken, "private");
+        loginComponent.renderForm();
 
-loginComponent.build(cacheToken, "private");
-loginComponent.renderForm();
+        carouselComponent.build(remoteData);
+        carouselComponent.render();
 
-carouselComponent.build(remoteData);
-carouselComponent.render();
+        tableComponent.build(["Image", "URL", "Delete"], remoteData);
+        tableComponent.render();
 
-tableComponent.build(["Image", "URL", "Delete"], remoteData);
-tableComponent.render();
+        formComponent.render();
 
-formComponent.render();
+        pubsub.subscribe("image-deleted", async id => {
+            spinner.classList.remove("d-none");
 
-pubsub.subscribe("image-deleted", async id => {
-    spinner.classList.remove("d-none");
+            const deleteRes= await middleware.delete(id);
+            const deleteJson= await deleteRes.json();
+            
+            const newRemoteData= await middleware.load();
+            pubsub.publish("get-remote-data", newRemoteData);
+            spinner.classList.add("d-none");
+        });
+        pubsub.subscribe("form-submit", async formData => {
+            spinner.classList.remove("d-none");
+            modal.hide();
+            
+            const addRes=middleware.upload(formData);
+            const addJson=addRes.json();
+            
+            const newRemoteData= await middleware.load();
+            pubsub.publish("get-remote-data", newRemoteData);
+            spinner.classList.add("d-none");
 
-    const deleteRes= await middleware.delete(id);
-    const deleteJson= await deleteRes.json();
-    
-    const newRemoteData= await middleware.load();
-    pubsub.publish("get-remote-data", newRemoteData);
-    spinner.classList.add("d-none");
-});
-pubsub.subscribe("form-submit", async formData => {
-    spinner.classList.remove("d-none");
-    modal.hide();
-    
-    const addRes=middleware.upload(formData);
-    const addJson=addRes.json();
-    
-    const newRemoteData= await middleware.load();
-    pubsub.publish("get-remote-data", newRemoteData);
-    spinner.classList.add("d-none");
-
+        });
+    });
 });
