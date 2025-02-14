@@ -31,13 +31,10 @@ app.use("/images", express.static(path.join(__dirname, "images"))); //permette a
 app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist/"))); //permette accesso a bootstrap all'appliacazione lato client
 
 //espone il web service per aggiungere immagini
-app.post('/add', async (req, res) => {
-    upload(req, res, (err) => { //funzione per memorizzare l'immagine su file system
-        db.insertURL(req.file.filename); //manda url al database
-        res.json({result: "Ok"});
-
-        console.log("Uploaded: " + req.file.filename)
-    });
+app.post('/add', multer({storage: storage}).single('file'), async (req, res) => {
+    db.insertURL(req.file.filename); //manda url al database
+    res.json({result: "Ok"});
+    console.log("Uploaded: " + req.file.filename);
 });
 
 //web services che permette di avere tutte le url delle immagini
@@ -57,6 +54,6 @@ app.delete('/delete/:id', async (req, res) => {
 const server = http.createServer(app);
 
 //parte il server
-server.listen(80, () => { 
+server.listen(5600, () => { 
     console.log("Server running...");
 });
