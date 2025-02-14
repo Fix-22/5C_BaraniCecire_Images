@@ -26,7 +26,6 @@ fetch("conf.json").then(r => r.json()).then(data => {
     const cacheToken = data.cacheToken;
 
     middleware.load().then(remoteData => {
-        console.log(remoteData)
         spinner.classList.add("d-none");
 
         loginComponent.build(cacheToken, "private");
@@ -40,27 +39,26 @@ fetch("conf.json").then(r => r.json()).then(data => {
 
         formComponent.render();
 
-        pubsub.subscribe("image-deleted", async id => {
+        pubsub.subscribe("image-deleted", id => {
             spinner.classList.remove("d-none");
 
-            const deleteRes= await middleware.delete(id);
-            const deleteJson= await deleteRes.json();
-            
-            const newRemoteData= await middleware.load();
-            pubsub.publish("get-remote-data", newRemoteData);
-            spinner.classList.add("d-none");
+            middleware.delete(id).then(data => {
+                middleware.load().then(newRemoteData => {
+                    pubsub.publish("get-remote-data", newRemoteData);
+                    spinner.classList.add("d-none");
+                });
+            });
         });
-        pubsub.subscribe("form-submit", async formData => {
+        pubsub.subscribe("form-submit", formData => {
             spinner.classList.remove("d-none");
             modal.hide();
             
-            const addRes=middleware.upload(formData);
-            const addJson=addRes.json();
-            
-            const newRemoteData= await middleware.load();
-            pubsub.publish("get-remote-data", newRemoteData);
-            spinner.classList.add("d-none");
-
+            middleware.upload(formData).then(data => {
+                middleware.load().then(newRemoteData => {
+                    pubsub.publish("get-remote-data", newRemoteData);
+                    spinner.classList.add("d-none");
+                });
+            });
         });
     });
 });
