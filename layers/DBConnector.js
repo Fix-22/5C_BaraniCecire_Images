@@ -17,10 +17,6 @@ module.exports = function generateDBConnector(conf) {
     };
 
     // crea tabella se non esiste
-    executeQuery(`
-        CREATE TABLE IF NOT EXISTS image
-        (id INT PRIMARY KEY AUTO_INCREMENT, url varchar(255) NOT NULL);
-    `);
 
     return {
         insertURL: async (filename) => { //inserisce nella tabella l'url dell'immagine passata
@@ -28,6 +24,13 @@ module.exports = function generateDBConnector(conf) {
             let sql = template.replace("$URL", "./images/" + filename);
             let r = await executeQuery(sql);   
             return r;
+        },
+
+        createTable: async()=>{
+           return executeQuery(`
+                CREATE TABLE IF NOT EXISTS image
+                (id INT PRIMARY KEY AUTO_INCREMENT, url varchar(255) NOT NULL);
+            `);
         },
         selectAllImages: async () => { //seleziona tutti gl'url dal db
             return executeQuery("SELECT id, url FROM image;");

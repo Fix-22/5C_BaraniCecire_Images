@@ -15,14 +15,16 @@ const app = express();
 
 //funzione per memorizzazione delle immagini su file system
 let storage = multer.diskStorage({ 
-        destination: function (req, file, callback) {
-            callback(null, path.join(__dirname, "images"));
-        },
-        filename: function (req, file, callback) {
-            callback(null, file.originalname);
-        }
-    });
-    const upload = multer({storage: storage}).single('file');
+    destination: function (req, file, callback) {
+        callback(null, path.join(__dirname, "images"));
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname);
+    }
+});
+const upload = multer({storage: storage}).single('file');
+
+db.createTable();
 
 app.use("/", express.static(path.join(__dirname, "public"))); //permette download della pagina lato client
 app.use("/images", express.static(path.join(__dirname, "images"))); //permette accesso alle immagini

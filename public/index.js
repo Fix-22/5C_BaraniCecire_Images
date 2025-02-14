@@ -4,10 +4,12 @@ import { generateLoginComponent } from "./scripts/loginComponent/loginComponent.
 import { generateCarouselComponent } from "./scripts/carouselComponent/carouselComponent.js";
 import { generateTableComponent } from "./scripts/tableComponent/tableComponent.js";
 import { generateFormComponent } from "./scripts/formComponent/formComponent.js";
+import { generateMiddleware } from "./scripts/middlewareComponent/middlewareComponent.js";
 
 generateNavigator(pages);
 
 const pubsub = generatePubSub();
+const middleware=generateMiddleware();
 const carouselContainer = document.getElementById("carouselBody");
 const carouselComponent = generateCarouselComponent(carouselContainer, pubsub);
 const loginContainer = document.getElementById("loginContainer");
@@ -20,56 +22,44 @@ const formComponent = generateFormComponent(formContainer, pubsub);
 const spinner = document.getElementById("spinner");
 
 const modal = new bootstrap.Modal("#modalForm");
+const conf=await fetch("conf.json");
+const json=await conf.json();
+const cacheToken = json.cacheToken;
 
-fetch("conf.json").then(d => d.json()).then(json => {
-    const cacheToken = json.cacheToken;
+const remoteData=await middleware.load();
 
-    fetch("/get").then(r => r.json()).then(data => {
-        spinner.classList.add("d-none");
+spinner.classList.add("d-none");
 
-        loginComponent.build(cacheToken, "private");
-        loginComponent.renderForm();
+loginComponent.build(cacheToken, "private");
+loginComponent.renderForm();
 
-        carouselComponent.build(data.images);
-        carouselComponent.render();
+carouselComponent.build(remoteData);
+carouselComponent.render();
 
-        tableComponent.build(["Image", "URL", "Delete"], data.images);
-        tableComponent.render();
+tableComponent.build(["Image", "URL", "Delete"], remoteData);
+tableComponent.render();
 
-        formComponent.render();
+formComponent.render();
 
-        pubsub.subscribe("image-deleted", id => {
-            spinner.classList.remove("d-none");
+pubsub.subscribe("image-deleted", async id => {
+    spinner.classList.remove("d-none");
 
-            fetch("/delete/" + id, {
-                method: 'DELETE',
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(r => r.json())
-            .then(data => {
-                fetch("/get").then(r => r.json()).then(data => {
-                    pubsub.publish("get-remote-data", data.images);
-                    spinner.classList.add("d-none");
-                });
-            });
-        });
+    const deleteRes= await middleware.delete(id);
+    const deleteJson= await deleteRes.json();
+    
+    const newRemoteData= await middleware.load();
+    pubsub.publish("get-remote-data", newRemoteData);
+    spinner.classList.add("d-none");
+});
+pubsub.subscribe("form-submit", async formData => {
+    spinner.classList.remove("d-none");
+    modal.hide();
+    
+    const addRes=middleware.upload(formData);
+    const addJson=addRes.json();
+    
+    const newRemoteData= await middleware.load();
+    pubsub.publish("get-remote-data", newRemoteData);
+    spinner.classList.add("d-none");
 
-        pubsub.subscribe("form-submit", formData => {
-            spinner.classList.remove("d-none");
-            modal.hide();
-            
-            fetch("/add", {
-                method: "POST",
-                body: formData
-            }).then(r => r.json())
-            .then(data => {
-                fetch("/get").then(r => r.json()).then(data => {
-                    pubsub.publish("get-remote-data", data.images);
-                    spinner.classList.add("d-none");
-                });
-            });
-        });
-    });
 });
